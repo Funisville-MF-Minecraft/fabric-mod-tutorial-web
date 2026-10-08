@@ -1,0 +1,55 @@
+---
+title: Server basics
+description: Running a dedicated or hosted Fabric server and preparing it for public play.
+---
+
+# Server basics
+
+A Fabric server is a Java process that loads Fabric and any server-side mods. If you want to run a public Minecraft server, the server is the authoritative side of the game. Every player connects to it, and the server decides what is valid, what is allowed, and what can be changed. That means server-side work is not a side topic. It is a core part of modding if you care about multiplayer, progression, economy, rules, commands, or moderation. The server decides what should happen, and the client is mostly there to display it and send input back.
+
+This distinction is one of the most important concepts in Fabric modding. A mod might look harmless because it adds a custom block or item, but if it changes a mechanic in the world, it needs to be considered from the server-side authority point of view. The same is true for Bedrock compatibility: a Java server stays authoritative even when a Bedrock client is being translated through Geyser.
+
+## The difference between client and server
+
+A mod can be client-only, server-only, or shared. This distinction matters a lot in practice. Client-only mods usually affect rendering, controls, or visuals. Server-only mods can change gameplay, world rules, chat, commands, or permissions without requiring every client to install a companion mod. Shared mods can affect both sides, though they still may need conditions or registration differences depending on whether code is running in a headless server or a normal client session.
+
+The reason this matters is not just technical. It affects the user experience. If a mod is server-only, you can sometimes avoid requiring a client install, which makes it easier to distribute and manage on a public server. If the mod is client-only, it may be visually pleasing but not actually change gameplay for the server or other players. If it is shared, you need to think carefully about which actions and resources are required on both sides.
+
+## Dedicated server checklist
+
+- Install Java and confirm the version matches the target Minecraft and Fabric release
+- Download the Fabric server jar or use the official Fabric installer
+- Accept the EULA and configure `server.properties`
+- Set memory limits with a safe JVM flag profile
+- Open the required ports on the network and confirm firewall rules
+- Make regular backups before changing mods or world data
+- Keep a clear changelog of server jars, modpacks, and config adjustments
+- Ensure you know how to restore world data quickly if a plugin, mod, or jar upgrade breaks something
+
+This checklist is not optional if you care about reliability. The server is the live service that players connect to, so the mod setup needs to be repeatable and recoverable. In many ways, server management is just software operations running inside a Minecraft context.
+
+## Hosting options
+
+You can run a Fabric server either on your own machine or through a server host. Self-hosting gives maximum control over the machine, backups, and networking, while a host can simplify the setup and operational burden. A host might also give you more convenient support for starting, stopping, and scheduling restarts, but it can come with limits in terms of file access, CPU allocation, and port configuration. The same modding principles apply in both cases, but hosted environments often require you to manage port forwarding, firewall expectations, and the provider's support model.
+
+A modern public server often ends up mixing both approaches. You may self-host a backup or maintenance server for testing, while a hosting provider handles the public live environment. The key is to think in systems terms: the server must be easy to deploy, easy to back up, and easy to recover without guesswork.
+
+## Authoritative design
+
+A modded server should keep the server authoritative for gameplay state. This is especially important once you support Bedrock players through Geyser, because Java and Bedrock clients have different expectations and controls. The Java server remains the source of truth for world rules, commands, inventory, and game logic. Bedrock players may be translated at the protocol layer, but the server still validates the result before committing it.
+
+This matters for anti-cheat, permissions, world protection, economy systems, and command behavior. If a client can bypass server-side validation, the world becomes unreliable. In a multiplayer game, that is not just a quality issue; it is a game design and stability issue.
+
+## Practical work flow for a real server
+
+Before you run a public server, set up a small private test world and validate each mod on a clean save. Add only one significant change at a time. Check the server log for startup warnings, run a few admin commands, and confirm that your server still starts cleanly after a restart. Once that is stable, make a backup, then scale to the public environment and test with a few real players.
+
+This is where documentation stops being theoretical. The real discipline is in operational checks: backups, startup scripts, restart policy, logging, and the ability to restore a known-good world state in under an hour.
+
+## Tested on
+
+This section is written for a practical server setup and should be checked against your provider or machine environment before deployment. Tested on: Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.
+
+## Rollback note
+
+If you change a live server install, make a full backup before modifying the server jar, changing configs, adding mods, or enabling Bedrock bridge tools. A rollback plan is part of any public server workflow. The easiest recovery path is a server setup that keeps the world data, configs, and mod files in a predictable directory structure and a backup script that can restore them quickly if the public environment goes unstable.

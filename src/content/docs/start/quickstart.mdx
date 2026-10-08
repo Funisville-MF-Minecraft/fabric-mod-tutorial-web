@@ -1,0 +1,79 @@
+---
+title: Quickstart
+description: The fastest path to a working Fabric mod project and a first local setup.
+---
+
+# Quickstart
+
+This guide gives you the shortest route to a clean Fabric setup. It is meant for a first project, not for production mod publishing. If you are completely new to Java modding, the goal is simple: get a workspace working, understand where the project files live, and confirm that dev mode can launch both the client and the server before you start changing anything. Fabric is a great place to start because the generated project structure is simple enough to read, but it still teaches the real workflow used by larger mod projects.
+
+The first few hours of modding are often not about writing custom gameplay logic. They are about environment correctness: Java version, Gradle sync, mod ID selection, and verifying that the game can boot with the mod present. A lot of frustration disappears once your system is consistent, and that is exactly why this quickstart focuses on the basic launch steps before the more interesting parts of mod content and server administration.
+
+## Prerequisites
+
+- Java 21 JDK installed and active on your PATH
+- A Java IDE such as IntelliJ IDEA or VS Code with the Java extension pack
+- An internet connection to download the Fabric template and dependencies
+- Enough free disk space for Gradle caches and Minecraft runtime downloads
+
+You do not need to know everything about the Java language before starting. You do need a working JDK and a reliable workspace, because Fabric development can fail early if the environment is slightly wrong.
+
+## 1. Create the project
+
+Use the Fabric template generator or the official template instructions to create a fresh project. The template will generate a project structure with source sets, default resources, a Gradle wrapper, and a mod metadata file. If you use a modern template, it will also set up the correct loader and mapping configuration for your target Minecraft version.
+
+This matters because a modding project is not just a Java project. It is a Java project with Minecraft-specific build hooks, resource management, and a special runtime environment. The template saves you from having to hand-wire all of that yourself and reduces the chance that you accidentally produce a broken environment early in the process.
+
+## 2. Import into your IDE
+
+Open the generated project in IntelliJ or VS Code. If Gradle is configured correctly, the IDE should recognize it as a Java project and download the required dependencies. This is the part where people usually discover that their Java installation, Gradle wrapper, or import process is not quite right.
+
+The most important check here is whether the project sync completes without Red errors. If the workspace does not import cleanly, the next steps will not work reliably. Often this means the wrong JDK is selected, the project was opened before the wrapper finished setting up, or the version target does not match the installed Java runtime.
+
+## 3. Run your first mod
+
+Use the generated Gradle tasks to run the game in development mode:
+
+```bash
+./gradlew runClient
+./gradlew runServer
+```
+
+The first launch is usually where you discover missing JDK setup, Java version mismatches, or incorrect workspace import state. It is normal to fix a couple of environment issues here before the project is fully stable. Do not treat that as a failure. It is part of the normal onboarding process for modding projects, and it becomes easier each time you repeat it.
+
+A successful `runClient` launch proves that your environment is sane enough to compile the mod, resolve dependencies, and boot the game with the custom code included. A successful `runServer` launch proves that the server side is also set up correctly, which matters a great deal if you want to build server-side gameplay or eventually run a public server.
+
+## 4. Check the first-launch checklist
+
+- The project builds without errors
+- The client launches in development mode
+- The server launches with the Fabric Loader and API in place
+- The mod ID is unique and matches your expected package naming
+- The generated mod metadata file is in the expected location
+- The IDE can see Gradle dependencies without unresolved imports
+
+This checklist matters because most mod issues are not random. They are caused by one of a few underlying problems: the wrong JDK, a stale Gradle cache, mismatched mappings, or a mod ID that collides with another mod or a bad package structure.
+
+## How it works
+
+Fabric projects rely on the Gradle wrapper, Loom, and the official Fabric mappings. The project generation step creates a standard mod layout so you can start adding custom items, blocks, or events without redoing the configuration from scratch. Loom handles the tricky part: mapping Minecraft classes, compiling source, and preparing your mod for the game runtime environment.
+
+The mod metadata file matters because Fabric uses it to understand the mod name, version, entrypoints, dependencies, and environment rules. In other words, the code is only half the story. The project configuration and the runtime metadata are what let the mod actually load into the game correctly.
+
+## Common mistakes
+
+- Using the wrong Java version for your target Minecraft version
+- Forgetting to reload Gradle after a dependency update
+- Importing the project without letting the IDE finish its Gradle sync
+- Creating duplicate mod IDs in the generated metadata
+- Assuming a server-only mod can be treated like a client mod without considering the side split
+
+These are not exotic issues. They are the common first-wave problems for Fabric modders, and the reason most projects feel confusing at the start is that they are all part of the same overall environment setup problem.
+
+## Exercise
+
+Create a project with a new mod ID and run it at least once with `runClient` before adding any custom content. Then run the server launch once as well. If both succeed, you have a stable starting point and can begin adding real gameplay content without worrying that the project environment is still broken.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Loom 1.7.x–1.8.x.

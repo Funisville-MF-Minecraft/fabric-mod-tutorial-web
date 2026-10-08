@@ -1,0 +1,39 @@
+---
+title: Bedrock overview
+description: Honesty about what Bedrock players can and cannot do on a Java Fabric server.
+---
+
+# Bedrock overview
+
+Fabric mods do not run on Bedrock clients. Minecraft: Bedrock Edition uses a different protocol, different networking stack, and a different codebase than Java Edition. That means a Bedrock player cannot simply install a Java Fabric mod and join a Java server in the same way a Java player does.
+
+## The supported route
+
+The practical path is Geyser plus Floodgate. Geyser bridges the Bedrock protocol to the Java server, and Floodgate helps Bedrock users join without a Java account or with extra compatibility handling for login flows.
+
+## Java vs Bedrock
+
+The most important difference is that Java Edition and Bedrock Edition are not just different clients. They are fundamentally separate game implementations. The item IDs, entity logic, GUI behavior, and redstone semantics are not the same, even when they appear similar to a player.
+
+This matters for mod and server design. A server-side-only mod that uses vanilla mechanics usually works better with Bedrock than a mod that depends on Java-only client rendering or custom GUI systems. Bedrock players also interact with the server in a way that is not exactly the same as Java players.
+
+## What works
+
+- Vanilla-like server rules and mechanics
+- Commands and simple gameplay modifications
+- Server-side data and inventory rules that don't rely on custom client assets
+- Bedrock players using a Geyser connection to the Java server
+
+## What does not work
+
+- Client-side Java mods that change rendering or input
+- Custom Java assets or GUI flows that require a Java client mod
+- Bedrock-specific behavior that cannot be translated through the Geyser bridge
+
+## Tested on
+
+Bedrock compatibility depends heavily on version pairs and bridge configuration. This overview is intentionally cautious. Tested on: Minecraft 1.21.1, Geyser 2.4.x, Fabric Loader 0.16.x.
+
+## Version notes
+
+Geyser and Floodgate update often, and Bedrock compatibility is not a static guarantee. Some features work across versions while others require a matching Java server and a known-good bridge configuration. Always verify the active bridge and server version pair before telling users their setup is fully supported.

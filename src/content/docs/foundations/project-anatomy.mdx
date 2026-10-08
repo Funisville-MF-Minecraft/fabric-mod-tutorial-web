@@ -1,0 +1,29 @@
+---
+title: Project anatomy
+description: An overview of the generated Fabric mod project layout and the key files that matter most for day-to-day development.
+---
+
+# Project anatomy
+
+A normal Fabric project is organized around Gradle, the mod metadata file, and the source sets that hold your Java code and resources. Once you understand the layout, it becomes much easier to reason about registries, assets, entrypoints, and tests.
+
+## Key files
+
+- `build.gradle` or `build.gradle.kts`: the Gradle build script
+- `settings.gradle` or `settings.gradle.kts`: project settings and plugin management
+- `gradle.properties`: shared settings such as version metadata and memory-related options
+- `src/main/resources/fabric.mod.json`: the mod manifest
+- `src/main/resources/assets/<modid>/`: client and server asset data
+- `src/main/java/`: Java classes for business logic, registries, and events
+
+## The mod manifest
+
+The `fabric.mod.json` file declares the mod identity, version, mixin settings, dependencies, and environment rules. It is the main contract that Fabric uses to load the mod correctly.
+
+## Resources and data
+
+Assets are separated into data files and language strings. The project structure typically distinguishes the behavior code from generated data files, letting you keep logic and resource mapping easier to reason about.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

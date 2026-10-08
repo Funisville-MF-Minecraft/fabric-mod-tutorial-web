@@ -1,0 +1,60 @@
+---
+title: Fabric Modding Guide
+description: A server-first guide to Fabric for Java Edition, dedicated hosting, and Bedrock connectivity through Geyser and Floodgate.
+template: splash
+hero:
+  tagline: Java Edition, server modding, and Bedrock support in one place.
+  actions:
+    - text: Start your first mod
+      link: /start/quickstart/
+      icon: right-arrow
+    - text: Run a Fabric server
+      link: /server/basics/
+      icon: rocket
+      variant: secondary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What this site covers
+
+This project is built for the Fabric ecosystem: not just client-side modding, but server-side modding, public server hosting, and Bedrock players joining a Java server through Geyser and Floodgate. In other words, this is not a minimal starter page for a single item or block. It is a complete learning path that tries to move from absolute beginner to someone who is capable of shipping real mods, operating a production server, and understanding why some ideas work on Java Edition while Bedrock players must follow a separate compatibility route.
+
+Fabric's appeal is that it is intentionally lightweight. The loader is smaller, the API surface is easier to reason about, and the project structure tends to guide you toward clear separation between mod logic, assets, and server behavior. The trade-off is that you need to learn the right building blocks: Java, Gradle, Loom, mappings, event systems, data generation, and how the game server keeps world state authoritative. This site is designed to teach those fundamentals in a practical order, starting with the basics and moving toward operations, economics of server hosting, and Bedrock bridging.
+
+<CardGrid stagger>
+	<Card title="Fabric fundamentals" icon="rocket">
+		Learn the Java, Loader, Loom, and mappings basics you need before you build anything serious. These concepts explain why a Fabric project looks the way it does and why a version bump can break a mod even when the code still compiles.
+	</Card>
+	<Card title="Server-first workflows" icon="server">
+		See how to run a dedicated or hosted Fabric server, harden it, and ship server-only gameplay features. This is a major emphasis because many real community servers are not built around a single client mod; they are built around server authority and world rules.
+	</Card>
+	<Card title="Bedrock access" icon="wand">
+		Understand the real path for Bedrock players: Geyser + Floodgate, compatibility constraints, and what works on a Java server. This is where the Java server remains the source of truth and Bedrock clients are treated as a bridge-connected client rather than a native Fabric environment.
+	</Card>
+	<Card title="Engineering and reliability" icon="seti:check">
+		Use testing, debugging, compatibility checks, and release workflows that fit real mod and server projects. A mod that works in a dev environment but fails in production is not finished, and the same is true for a server that is live and facing players.
+	</Card>
+</CardGrid>
+
+## Why this site exists
+
+A lot of modding docs stop at "here is how to register an item" or "here is how to make a block" and never cover the long tail of real-world work. The missing topics are often the ones that matter most to a mod author or server operator: Java version management, resource pipelines, dedicated server deployment, compatibility with Bedrock players, and how to think about the server as a production service instead of just a game client.
+
+This site tries to fill that gap. It is meant to help someone go from a blank workspace to a running dev environment, then from a basic mod to a live server, and then from a live server to a public-facing multiplayer environment that can accept Java and Bedrock players with the right setup.
+
+## Recommended path
+
+1. Read the [What is modding?](/about/what-is-modding/) overview.
+2. Follow the [Quickstart](/start/quickstart/) to set up a working mod project.
+3. Move into the [Server basics](/server/basics/) section before you publish anything live.
+4. Use the [Bedrock overview](/bedrock/overview/) page before you open the server to mobile, console, or Windows Bedrock players.
+5. Use the [server hosting guide](/server/hosting/) when you are ready to move beyond local play and toward a real public setup.
+
+> Tested on: Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Loom 1.7.x–1.8.x, Geyser 2.4.x.
+
+## Local dev and hosted deployment
+
+This project works both as a local documentation site for writing and previewing pages and as a public website that can be deployed to GitHub Pages or a similar static host. The same content source can be used in both settings because Astro builds a static site for deployment. That makes the docs useful for local iteration and for an official public home for the project.
+
+If you are running a local preview, use `npm run dev`. If you are preparing a public release, use the built static output and publish it to a static host or GitHub Pages. The project is designed to support both flows, and the repository includes a deployment workflow to make the production path straightforward.

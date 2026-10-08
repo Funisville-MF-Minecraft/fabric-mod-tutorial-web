@@ -1,0 +1,57 @@
+---
+title: Hosting a Fabric server
+description: How to run a Fabric server locally, through a provider, and in a public deployment flow without losing reliability.
+---
+
+# Hosting a Fabric server
+
+A Fabric server can be hosted in several ways, and the difference between a good setup and a bad one is usually determined before the first players join. Some people prefer self-hosting on a home machine or a small rented VPS, while others use a commercial game hosting provider that handles the operating system and base setup. Both routes are valid, but they require different expectations about access, automation, and recovery.
+
+Before choosing a path, it is useful to define what the server is supposed to be. Is it a private survival server for friends? A public community with regular restarts and backups? Or a testing server where you try new mod versions before updating the live world? The answer changes the hosting decision. A small private server can tolerate a bit more improvisation, while a public server needs predictable restarts, backups, and a clear rollback procedure.
+
+## Self-hosting vs hosting providers
+
+Self-hosting gives you the most control. You can choose the machine, install the exact version of Java you want, adjust the boot script, set the memory flags, and decide how to back up the world. This is a great approach for learning and experimentation, but it can become operationally cumbersome when your server has to stay online for a long time. You also need to think about electricity, networking, firewall rules, and the fact that home Internet setups are often less stable or less secure than a managed hosting environment.
+
+Hosted providers simplify the mechanical work. They often give you a pre-managed Linux environment, some way to upload mods and worlds, and a dashboard that makes restarts easier. This can be a better fit if you want to focus on gameplay, server administration, and Bedrock bridging instead of fiddling with the operating system. The drawback is that you have less direct control and sometimes different limits on ports, CPU, memory, or file access.
+
+## GitHub Pages and static hosting are different from a Minecraft server
+
+This site itself is a static docs site and can be hosted on GitHub Pages, Cloudflare Pages, Netlify, or a similar host. That is a different problem from running a Minecraft server. A docs site is static HTML and can be served without running a Java process. A Minecraft server is a live game service that requires a dedicated runtime, storage, memory allocation, and usually port exposure. The methods are very different even though both may be published on the web.
+
+The important point is that a public website host and a public game server host are not the same category of hosting. A docs host can generate and serve static files; a game server host must run the Java process that accepts player connections. The same project can still support both, but they require different operational logic.
+
+## What a healthy public server setup looks like
+
+A healthy public server has a few recurring habits:
+
+- a tested Java version that matches the Fabric environment
+- a clean modpack and dependency lock for the version being run
+- a startup script with explicit memory flags
+- a known-good world backup before every mod update
+- safe restart timing so players are warned before downtime
+- a firewall and port plan that is documented and not guessed
+- a plan to verify server health after every restart
+
+These habits matter because the most common public server failures are not dramatic. They are boring but expensive: a bad mod update, a stale jar, memory exhaustion, or a bad backup. By definition, a multiplayer world is shared state, so the operating model needs to be methodical rather than improvisational.
+
+## Public-facing deployment flow
+
+A good, repeatable flow looks like this:
+
+1. Test the modpack on a local or private dev server.
+2. Keep a clean backup of the world before changing jar files or configs.
+3. Deploy in a controlled environment and confirm the server starts without critical errors.
+4. Test commands, world rules, and Bedrock bridging before inviting all players.
+5. Restart on a schedule or after a release, then verify that the world remains stable.
+6. Keep logs and crash reports for debugging, and never assume a mod update is harmless.
+
+This is the same pattern used by many serious online services: test, verify, deploy, monitor, rollback. The differences are that the service is game-specific and the backup and restore points are often the world folder itself.
+
+## Tested on
+
+This page is a practical server hosting guide and should be validated against your chosen host or self-hosting environment before you treat it as a production recommendation. Tested on: Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.
+
+## Version notes
+
+Hosting providers, Java runtime assumptions, and hardware constraints change on a regular schedule. The best practice is to treat the exact memory, port, and server process settings as version-sensitive and to confirm them against the current official docs before publishing them as a public recommendation.

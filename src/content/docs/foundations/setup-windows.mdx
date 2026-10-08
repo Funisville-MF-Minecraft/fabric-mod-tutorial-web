@@ -1,0 +1,81 @@
+---
+title: Setting up Fabric on Windows
+description: How to install the Java toolchain, configure a Fabric project on Windows, and run Minecraft in development mode without a broken setup.
+---
+
+# Setting up Fabric on Windows
+
+Windows is the most common first environment for Minecraft players, which means it is also one of the most important setups to document clearly. A lot of beginner issues are not actually caused by Fabric itself; they happen because Java is installed incorrectly, the wrong version is active, the project is opened before Gradle sync is finished, or the IDE is pointing to the wrong JDK. If you are on Windows and you want to make mods, you need a stable and predictable Java toolchain before anything else.
+
+This guide focuses on the practical path: installing a compatible JDK, creating a proper Fabric project, opening it in an IDE, and confirming that both the client and the server can launch. Once that works, the rest of the modding project becomes much easier to reason about.
+
+## Install the correct JDK
+
+Start by installing a supported Java JDK version for your target Minecraft and Fabric setup. In a modern Fabric project, this usually means using the right Java version for the expected Minecraft target instead of whatever Java happens to be installed by default. Many new users get stuck here because Windows often has a system-level Java installation that is not the same one their IDE is using.
+
+After installation, verify the runtime from the terminal:
+
+```powershell
+java -version
+javac -version
+```
+
+If the version is not the one you expect, then the project may build against the wrong runtime even if the code looks correct. That will usually show up later as a Gradle failure or a mod launch failure.
+
+## Prepare the IDE
+
+The two most common IDEs for Fabric are IntelliJ IDEA and VS Code. Both can work, but the setup experience is still easiest when you explicitly tell the IDE which Java installation to use. In IntelliJ, the project JDK should match the runtime you plan to use. In VS Code, the Java extension should resolve the same JDK and the project should not be opened before the workspace is synced.
+
+A good habit is to make sure the IDE has finished indexing and Gradle sync before you trust it to build. An IDE that is still processing dependencies may look like a build problem later on, even though the root cause is simply incomplete project initialization.
+
+## Create and import the project
+
+Use the official Fabric project template or generator and then open the project folder in the chosen IDE. Once the project is open, let Gradle finish its sync. If the project metadata is correct, the IDE should detect the Java project and resolve the Fabric dependencies without too much drama.
+
+At this point, the project is still not “done,” but it is far closer to a usable workspace than a blank folder. Many people underestimate the value of a clean import because the project setup itself is the first real proof that the environment is sound.
+
+## Run the dev environment
+
+Once the project imports correctly, run the development tasks from the project root:
+
+```powershell
+./gradlew.bat runClient
+./gradlew.bat runServer
+```
+
+The client task starts the game in development mode with your mod included. This is the quickest way to check that the code compiles and that the project is actually loading. The server task is just as important if you plan to build anything that affects the multiplayer game loop, commands, item behavior, world protection, or server logic.
+
+If either task fails, the issue is usually in one of these areas:
+
+- wrong JDK version
+- stale or broken Gradle cache
+- missing IDE sync
+- invalid mod metadata and mod ID
+- version mismatch between Minecraft target and Fabric project
+
+## First-launch checklist on Windows
+
+Before you move on to editing code, confirm each of these:
+
+- Java is clearly installed and visible in the terminal
+- The IDE points to the same JDK that the project expects
+- Gradle is synced and no major dependency errors remain
+- `runClient` starts the game without crashing immediately
+- `runServer` starts the server and does not fail during the startup sequence
+- Your mod ID and package structure are neat and unique
+
+The point of this checklist is not to be overbearing. It is simply a way of making sure the project is stable before you attempt larger changes.
+
+## Common Windows issues
+
+Common problems on Windows include Java install confusion, antivirus or file locking issues, and a project that is opened before the IDE has finished Gradle sync. Some users also run a project from a folder with a non-ASCII path or a path that has a parent folder with restrictive permissions. That can cause very strange build outcomes.
+
+Windows can also have multiple Java versions at once, which is why it is so easy to confuse the right version with the wrong one. The solution is to be explicit: choose the JDK you will use, confirm it in the terminal, then make the IDE use that same one.
+
+## Tested on
+
+This page is written as a practical setup guide and should be checked against current official docs before release. Tested on: Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Windows-based desktop development environments.
+
+## Version notes
+
+Windows-specific setup details can shift as Java distributions, IDEs, and Fabric template tools update. The underlying principle does not change: make the Java runtime explicit, keep Gradle synced, and verify both the client and server launch tasks before you rely on the project for real mod development.

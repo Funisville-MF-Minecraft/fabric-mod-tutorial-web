@@ -1,0 +1,62 @@
+---
+title: What is modding?
+description: A practical guide to what modding means in Minecraft, and how Fabric fits into the Java Edition ecosystem.
+---
+
+# What is modding?
+
+Modding is the process of changing how Minecraft behaves by loading custom code, assets, and data into the game. In Java Edition, mods run on the Java client and server. That makes the ecosystem flexible and powerful, but it also means that mod authors have to pay attention to shared code, server compatibility, and version-specific APIs. A mod is not just a cosmetic change or a plugin-like tweak; it can alter fundamental systems such as world generation, entities, items, recipes, events, networking, and even the logic used to process a player action on a multiplayer server.
+
+When you start a modding project, you are also starting a software engineering project. You are dealing with versioned APIs, build tooling, resource packaging, runtime classes, testing, and a great deal of compatibility planning. The Minecraft ecosystem is large and sometimes confusing because the game has both a client and a server that must stay synchronized. That is why a good modding knowledge base needs to teach both the gameplay concepts and the engineering practices behind them.
+
+## Fabric in context
+
+Fabric is a lightweight mod loader for Minecraft: Java Edition. It is known for its smaller scope, quick iteration, and a strong focus on the public API and support libraries. Compared with Forge and NeoForge, Fabric generally keeps the loader itself smaller and tends to favor community-maintained APIs and data-driven extension points. Quilt is another modern option with a different philosophy, but this guide begins from the Fabric path because it is well suited to teaching the essential concepts without burying the reader under too much framework complexity.
+
+The loader is not the same thing as the full content ecosystem. Fabric Loader handles the process of loading mods at runtime, resolving dependencies, and hooking into the Minecraft environment. Fabric API provides a useful collection of helpers for common content and gameplay tasks. Loom handles the Gradle integration, remapping, and dev environment setup. Mappings translate the obfuscated game code into readable names, which is why mod authors can work with classes and methods that make sense to a Java developer.
+
+### Honest trade-offs
+
+Fabric is often a good choice for beginners because it has a relatively transparent starting point. You can create a project using a template, run `runClient` and `runServer`, and begin adding your own logic. The trade-off is that you still must understand the way Minecraft is structured at runtime, especially when a mod touches server authority or shared code. Forge and NeoForge have larger ecosystems and more long-established patterns, but they can also feel more invasive. Quilt is an alternative loader with different community conventions and a different project philosophy.
+
+- Fabric: flexible, fast to iterate, strong docs and active ecosystem, Java-only runtime model, usually simpler to understand for beginners.
+- Forge: broad ecosystem and a long history, richer legacy compatibility, but can be more complex to work in and more burdensome for server setup.
+- NeoForge: a stronger modern continuation of the Forge ecosystem, useful when you depend on that ecosystem and want a more extensive mod platform.
+- Quilt: an alternative loader with a different community and ecosystem priorities; many concepts overlap with Fabric while project culture differs.
+
+## The key pieces of Fabric
+
+A Fabric setup usually includes four important moving parts:
+
+- Fabric Loader: the code that loads mods at runtime and resolves dependencies.
+- Fabric API: the official helper library that covers common modding needs and events.
+- Loom: the Gradle plugin that wires Fabric mappings, remapping, and project tasks together.
+- Mappings: the names that map from deobfuscated game code to stable names used by mod developers.
+
+These are not random details. They explain why the project feels like a Java project, why the build system matters, and why a mod update often requires a re-sync with the current version of the game and the loader. The more you understand the build pipeline, the fewer confusing breakages you will run into when the Minecraft version changes.
+
+### Why mappings matter
+
+Minecraft is shipped as obfuscated game code. Modders do not usually work against the raw runtime names. Instead, the project uses mappings to translate the game to readable names and to keep build output stable across versions. Without that layer, every Java class name would be a confusing runtime artifact instead of a readable API that the mod author can reason about.
+
+This is why a Fabric project includes a target Minecraft version, a loader version, and a curated set of mappings. When the version changes, the mapping set and the API surface may shift as well. This is a normal part of the ecosystem, not an anomaly. That is why a version-specific compatibility page is such an important part of a serious documentation site.
+
+## Java and Minecraft examples
+
+If you are writing a Fabric mod, you are writing Java code that hooks into Minecraft classes, registries, events, and data objects. For example, a simple item registration involves a mod identifier, a registry entry, and a resource location. That is not just a name in a file; it is part of the runtime system that the game uses to understand the world. When you register a custom item, you are adding new content to the registry and telling Minecraft how it should be stored, referenced, and handled by the game.
+
+This is different from writing plugin code for a Bukkit server, because the whole environment is tied to the game loop and the client/server split of Minecraft itself. Fabric mods can affect both the client and the server, and they often need to decide whether their logic should run only on the client, only on the server, or in both places. That decision shapes everything from rendering to authority to save data and multiplayer behavior.
+
+## Server-first perspective
+
+A modern modding guide should also explain the server side. The server is the authority in multiplayer. If a mod changes gameplay logic, item behavior, or world rules, it often has to be designed with the server in mind. This is especially true for world protection, economy loops, command permissions, and anything that must remain consistent across players.
+
+This is where Fabric and server hosting become more than a curiosity. A real public server needs to think about Java memory, port configuration, backups, anti-abuse protections, and a strategy for Bedrock clients. A documentation site that covers only client mods leaves out much of the real project work.
+
+## Tested on
+
+This page is a conceptual guide and should be checked against the latest official docs before release. Tested on: Minecraft 1.21.1, Fabric API 0.115.x, Fabric Loader 0.16.x, Loom 1.7.x–1.8.x, Geyser 2.4.x.
+
+## Version notes
+
+Fabric, Minecraft, and the surrounding ecosystem changes quickly. The exact module names, compatibility expectations, and supported APIs can shift between snapshots and stable releases. Always confirm the latest official docs before publishing advice that depends on a specific class or registry API. A good rule is to treat any tutorial or blog post as a starting point rather than a finished source of truth for a live modding project.

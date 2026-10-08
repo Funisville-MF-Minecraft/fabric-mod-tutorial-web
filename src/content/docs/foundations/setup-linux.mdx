@@ -1,0 +1,57 @@
+---
+title: Setting up Fabric on Linux
+description: A practical Linux setup guide for Fabric development and running a dedicated server from the command line.
+---
+
+# Setting up Fabric on Linux
+
+Linux is often the easiest place to build and run a Fabric server because it gives you direct control over Java, memory flags, the JVM, and service management. This is especially useful when you are building a public server, testing a modpack, or preparing for more advanced server automation such as cron jobs, backups, or systemd service scripts. Even if you primarily use IntelliJ or VS Code on a desktop machine, Linux is still worth understanding because the same tools and concepts transfer to many server environments.
+
+The basic Linux setup is simple. Install a supported JDK, verify that it is active, make sure Gradle can run from the workspace, and confirm that the project can start its `runClient` and `runServer` tasks. Once that is working, the rest of the flow is mostly about reliability and operational discipline.
+
+## JDK and environment checks
+
+Start by confirming the Java version in your shell:
+
+```bash
+java -version
+javac -version
+```
+
+The exact version depends on your target Minecraft and Fabric compatibility requirements. The important point is not to rely on a random Java install that happens to exist in the system. Use the version you intentionally chose and keep the environment consistent. This reduces the chance of mystery errors during Gradle sync or when launching the game in dev mode.
+
+If your distribution uses multiple Java versions, you may want to configure `JAVA_HOME` or use a tool like `sdkman` to manage versions. This can be especially helpful if you are testing multiple versions of Minecraft or multiple loaders on the same machine.
+
+## Running Fabric from the terminal
+
+The most basic workflow is still the same as anywhere else:
+
+```bash
+cd /path/to/your/project
+./gradlew runClient
+./gradlew runServer
+```
+
+This is an important step because the CLI is a reliable way to confirm that the environment is correct. A GUI IDE can hide some details, while the terminal output will tell you whether the JDK is valid, whether the project replaced a mapping correctly, or whether a dependency failed to load.
+
+The server side is especially important on Linux because many public server operators use headless or remote management workflows. A Linux environment is also where you may implement a startup script, a service definition, or automated restarts. These operational habits are not optional for a public or semi-public server.
+
+## Systemd and startup scripts
+
+If you want a server to stay up reliably, a systemd service or a similar service runner is often better than manually launching the Java process in a terminal each time. The advantage is that the process can restart cleanly after a reboots, and the logs are easier to manage. A service file can declare the working directory, the Java command, the memory settings, and which logs or output files to capture.
+
+A Linux server is often where you also decide whether your environment is supposed to be stateful or near-ephemeral. For example, if your server is managed by a host or a container system, you may want a process that can be restarted without manual recovery steps. This is where an operational mindset matters: treat the live world as data, not as a stack of randomly edited files.
+
+## Backups and reliability
+
+Linux makes it easy to automate backups with shell scripts and cron. A common pattern is to stop the server at a safe time, archive the world folder, and then restart it. That is much safer than assuming a world will always be recoverable without a backup. For servers that support Bedrock players through Geyser, the backup plan should also include the bridge configuration and any mod configs that may affect the connectivity path.
+
+This is not just a server admin preference. It is part of long-term maintenance and crash recovery. The more your server is public-facing, the more important it becomes to have tested and repeatable restoration steps.
+
+## Tested on
+
+This page is meant to be practical and environment-aware. Tested on: Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Linux-based server environments.
+
+## Version notes
+
+Linux package names, Java installation paths, and service definitions change over time. The exact command sequence can vary by distribution, but the underlying principle stays the same: install the right JDK, verify the environment, and run `gradlew` from the project root before you treat the setup as production-ready.
