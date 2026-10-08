@@ -1,5 +1,6 @@
-When I said that I wanted a generator, I meant like you could download the .zip
-folder from a generator on the website... kinda like the official Fabric generator.
+When I said that I wanted a generator, I meant like you could download the files
+or copy the code from prompts, for example the official mod generator on the 
+official Fabric website (https://fabricmc.net/develop/template/)
 
 For the footer for each page, can you also state that this was made with Github Copilot?
 Thanks.
