@@ -27,24 +27,21 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: site/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install docs dependencies
-        working-directory: site
         run: npm ci
 
       - name: Check coverage manifest
-        working-directory: site
         run: npm run check:coverage
 
       - name: Build site
-        working-directory: site
         run: npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/dist
+          path: dist
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

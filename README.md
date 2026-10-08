@@ -4,10 +4,9 @@ This repository contains a multi-page documentation site for Fabric modding on M
 
 ## Local development
 
-From the site directory:
+From the project root:
 
 ```bash
-cd site
 npm install
 npm run dev
 ```
@@ -17,11 +16,10 @@ Then open the local preview in your browser.
 ## Production build
 
 ```bash
-cd site
 npm run build
 ```
 
-The generated static site is output to `site/dist`.
+The generated static site is output to `dist`.
 
 ## GitHub Pages deployment
 
