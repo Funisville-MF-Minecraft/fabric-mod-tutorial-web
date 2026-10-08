@@ -1,0 +1,5 @@
+When I said that I wanted a generator, I meant like you could download the .zip
+folder from a generator on the website... kinda like the official Fabric generator.
+
+For the footer for each page, can you also state that this was made with Github Copilot?
+Thanks.
