@@ -1,0 +1,136 @@
+---
+title: Item code generator
+description: "A practical generator prompt and starter pattern for creating custom Fabric item classes, registries, and recipe hooks."
+---
+
+# Item code generator
+
+This page is meant to help you generate a clean, minimal custom item for a Fabric mod without writing every boilerplate line by hand. It is especially useful at the beginning of a project when you want a reliable starter pattern that you can then customize.
+
+A custom item is usually a good first feature because it teaches a few essential patterns at once: registration, metadata, resource setup, and the way a mod connects to the game lifecycle.
+
+## Recommended generator prompt
+
+Use a prompt like this:
+
+```text
+Generate a Fabric Java item for Minecraft 1.21.1.
+Use the standard Fabric mod project layout.
+Create:
+- a mod bootstrap class
+- a custom item class named ExampleItem
+- a ModItems registry class
+- a simple registration method using Fabric registries
+- a recipe for the item
+- a language entry in en_us.json
+- a README section explaining how to run `./gradlew runClient`
+Keep the code beginner-friendly, well-named, and easy to extend.
+```
+
+## Expected output structure
+
+```text
+src/
+  main/
+    java/
+      com/example/mod/
+        ExampleMod.java
+        item/
+          ExampleItem.java
+        registry/
+          ModItems.java
+    resources/
+      fabric.mod.json
+      assets/
+        examplemod/
+          lang/
+            en_us.json
+      data/
+        examplemod/
+          recipes/
+```
+
+## Starter Java pattern
+
+```java
+package com.example.mod.item;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
+
+public class ExampleItem extends Item {
+    public ExampleItem() {
+        super(new Item.Settings().maxCount(16));
+    }
+
+    public static final Identifier ID = new Identifier("examplemod", "example_item");
+    public static final Item INSTANCE = Registry.register(
+        Registries.ITEM,
+        ID,
+        new ExampleItem()
+    );
+}
+```
+
+## Starter registry pattern
+
+```java
+package com.example.mod.registry;
+
+import com.example.mod.item.ExampleItem;
+import net.minecraft.item.Item;
+
+public final class ModItems {
+    public static final Item EXAMPLE_ITEM = ExampleItem.INSTANCE;
+
+    public static void register() {
+        // Registration happens in the item class itself in this minimal pattern.
+    }
+}
+```
+
+## Recipe and resource pattern
+
+A generated item should also include a basic recipe and language entry so the item is discoverable in-game:
+
+```json
+{
+  "item.examplemod.example_item": "Example Item"
+}
+```
+
+```json
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:stick" },
+    { "item": "minecraft:diamond" }
+  ],
+  "result": {
+    "item": "examplemod:example_item",
+    "count": 1
+  }
+}
+```
+
+## What to validate
+
+After generation, check the following before you add extra features:
+
+- the item ID matches the mod ID and naming convention
+- the registry is loaded in the mod bootstrap
+- the language entry matches the item ID
+- the recipe loads without data errors
+- the item appears in the creative tab or item group if you expect it to
+- the project can run in `runClient` without a crash
+
+## Java-only note
+
+This is a Java Edition Fabric item pattern. It is intended for a normal Java client and server workflow. If you are building a Bedrock-compatible public server, the item should still be considered in the context of server-authoritative game rules, not as a Bedrock-native client feature.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

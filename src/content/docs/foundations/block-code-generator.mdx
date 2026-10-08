@@ -1,0 +1,153 @@
+---
+title: Block code generator
+description: "A practical starter for generating custom Fabric block classes, models, blockstates, registry entries, and basic item hooks."
+---
+
+# Block code generator
+
+Blocks are one of the easiest ways to start building a real mod because they teach you how registries, assets, and data generation interact. A good generator should produce a minimal but valid block with clean Java setup and a working resource layout.
+
+This page is meant to help you generate a safe first block without skipping the parts that matter: registration, resources, and the game’s runtime expectations.
+
+## Recommended generator prompt
+
+```text
+Generate a Fabric Java block for Minecraft 1.21.1.
+Create:
+- a custom block class named ExampleBlock
+- a registry class for blocks
+- a block item so the block can be placed in-game
+- a simple block model and blockstate file
+- a language entry for the block name
+- a recipe or crafting hook for the block
+- a clean README section for development and testing
+Keep the code simple, well-structured, and beginner-friendly.
+```
+
+## Expected output structure
+
+```text
+src/
+  main/
+    java/
+      com/example/mod/
+        ExampleMod.java
+        block/
+          ExampleBlock.java
+        registry/
+          ModBlocks.java
+    resources/
+      fabric.mod.json
+      assets/
+        examplemod/
+          blockstates/
+            example_block.json
+          models/
+            block/
+              example_block.json
+            item/
+              example_block.json
+          lang/
+            en_us.json
+      data/
+        examplemod/
+          recipes/
+            example_block_recipe.json
+```
+
+## Starter Java pattern
+
+```java
+package com.example.mod.block;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
+
+public class ExampleBlock extends Block {
+    public ExampleBlock() {
+        super(Settings.create().mapColor(MapColor.CYAN).strength(2.0F, 3.0F));
+    }
+
+    public static final Identifier ID = new Identifier("examplemod", "example_block");
+    public static final Block INSTANCE = Registry.register(
+        Registries.BLOCK,
+        ID,
+        new ExampleBlock()
+    );
+
+    public static final BlockItem ITEM = Registry.register(
+        Registries.ITEM,
+        new Identifier("examplemod", "example_block"),
+        new BlockItem(INSTANCE, new Item.Settings())
+    );
+}
+```
+
+## Starter blockstate pattern
+
+```json
+{
+  "variants": {
+    "": { "model": "examplemod:block/example_block" }
+  }
+}
+```
+
+## Starter model pattern
+
+```json
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "examplemod:block/example_block"
+  }
+}
+```
+
+## Resource and recipe pattern
+
+```json
+{
+  "item.examplemod.example_block": "Example Block"
+}
+```
+
+```json
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": { "item": "minecraft:stone" }
+  },
+  "result": {
+    "item": "examplemod:example_block"
+  }
+}
+```
+
+## What to validate
+
+Before you treat the block as complete, confirm:
+
+- the block ID is unique and matches the mod ID
+- the block item is registered so it can be placed
+- the block model and blockstate files load without errors
+- the recipe references valid item IDs
+- the block appears in the game and can be placed in a test world
+- the server starts cleanly when the block is present
+
+## Bedrock-aware note
+
+A custom block is a Java-side world feature, and it behaves differently for Bedrock players than a client-side decorative feature does. If the block is meant to participate in a public server that accepts Bedrock players, the server-authoritative design still matters: the Java server is the source of truth, and bridge compatibility must be checked before assuming Bedrock support.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

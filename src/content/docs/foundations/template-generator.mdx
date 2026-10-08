@@ -1,0 +1,190 @@
+---
+title: Mod template and code generator
+description: "A practical starter for generating Fabric mod boilerplate, compatibility-safe templates, and server-first scaffolds for Java and Bedrock-aware projects."
+---
+
+# Mod template and code generator
+
+This page is meant to help you move from a blank idea to a working mod scaffold faster. The goal is not to replace real understanding. The goal is to reduce the boring boilerplate and give you a clean starting point you can then customize and validate.
+
+The best scaffolding workflows follow the same pattern:
+
+1. Define the goal of the mod
+2. Choose a JVM-first or Bedrock-aware compatibility model
+3. Generate the starter files and project structure
+4. Validate the mod loads before expanding the feature set
+5. Add the real gameplay logic and server rules after the setup is stable
+
+## Java-only section
+
+This section is for a standard Fabric mod project that targets Java Edition and a Java-based server workflow.
+
+### Java-only starter prompt
+
+Use a prompt like this when you want a Fabric mod scaffold:
+
+```text
+Create a Fabric 1.21.1 mod project for Minecraft Java Edition.
+The mod should:
+- use the standard Fabric project layout
+- include a custom item and a custom block
+- register both with Fabric registries
+- create a basic recipe using the item and block
+- include a starter `fabric.mod.json` and mod ID
+- use a clean package structure
+- generate Java classes for the main mod bootstrap and the item/block registration
+- include a short README explaining how to run `./gradlew runClient` and `./gradlew runServer`
+- keep the code beginner-friendly and well-commented
+```
+
+### Java-only template checklist
+
+A good Java-only scaffold should include:
+
+- a valid mod ID and package name
+- a bootstrap class or entrypoint
+- a custom item registration
+- a custom block registration
+- a recipe or data generation hook
+- a simple server-safe gameplay idea
+- a README with build and run instructions
+- a first-pass `fabric.mod.json` that can be validated
+
+### Java-only starter file structure
+
+```text
+src/
+  main/
+    java/
+      com/example/mod/
+        ExampleMod.java
+        ModItems.java
+        ModBlocks.java
+        ModRegistries.java
+        ModCreativeTabs.java
+    resources/
+      fabric.mod.json
+      assets/
+        examplemod/
+          lang/
+            en_us.json
+      data/
+        examplemod/
+          recipes/
+```
+
+### Java-only generator workflow
+
+Use this order when building a mod from a generated template:
+
+1. Generate the project shell
+2. Confirm the Java version matches the target Minecraft version
+3. Run Gradle sync and confirm no unresolved dependencies remain
+4. Run `runClient` once before adding custom gameplay logic
+5. Run `runServer` once to confirm the server path also boots
+6. Add your actual feature logic after the project is stable
+
+This keeps the generator useful without hiding the fact that a working runtime environment is still the first real milestone.
+
+## Bedrock-inclusive section
+
+This section is for projects that need to support a Java server while still being realistic for Bedrock players. The key idea is that Bedrock compatibility is almost always a server and bridge problem, not a Java client mod problem.
+
+### Bedrock-inclusive starter prompt
+
+Use a prompt like this when you want a Bedrock-aware foundation:
+
+```text
+Create a Bedrock-aware Fabric server design for a Minecraft Java Edition server.
+The project should:
+- assume the Java server is authoritative
+- include a Geyser-ready compatibility plan
+- include a Floodgate-friendly login layout
+- separate server-authoritative gameplay logic from client-only visuals
+- generate a sample server checklist for Bedrock players
+- include a compatibility matrix for Java vs Bedrock features
+- list which features are safe for Bedrock compatibility and which features are not
+- include a deployment checklist for a public server
+```
+
+### Bedrock-inclusive template checklist
+
+A compatible Bedrock-inclusive scaffold should include:
+
+- server-authoritative rules
+- permission and command readiness
+- a bridge-compatible design model
+- a clear note that Bedrock does not run Java mods directly
+- a distinction between server-side-only and client-side-only features
+- a testing plan for Java and Bedrock player access
+
+### Bedrock-inclusive starter structure
+
+```text
+server/
+  config/
+    geyser.yml
+    floodgate.yml
+  scripts/
+    backup.sh
+    start-server.sh
+  docs/
+    bedrock-compatibility-checklist.md
+    server-setup-checklist.md
+  src/
+    main/
+      java/
+        com/example/mod/
+          ExampleMod.java
+          ServerRules.java
+          CommandBootstrap.java
+```
+
+### Bedrock-inclusive generator workflow
+
+1. Generate a Java server template first
+2. Define which gameplay must be server-authoritative
+3. Add a Bedrock compatibility checklist and bridge plan
+4. Decide which features are safe to support through Geyser
+5. Avoid Java-only UI or rendering features that Bedrock cannot mirror
+6. Validate with Java client and Bedrock client tests before release
+
+## Prompt patterns for better generated code
+
+These are examples of better prompts because they state a target outcome, expected structure, and validation step.
+
+### Good prompt pattern
+
+```text
+Generate a Fabric mod skeleton for Minecraft Java Edition.
+Target: 1.21.1
+Use Fabric Loader 0.16.x and Fabric API 0.115.x.
+Include item registration, block registration, and a simple recipe.
+Keep it beginner-friendly and comment the main steps.
+Add a README with setup and run instructions.
+```
+
+### Better Bedrock-aware prompt pattern
+
+```text
+Generate a Java server-first Fabric mod template that is compatible with a Geyser-enabled Bedrock setup.
+The mod must be server-authoritative and should not rely on client-only rendering.
+Include a design note for what is safe for Bedrock players and what is not.
+Add a deployment checklist for a public server and a Bedrock verification checklist.
+```
+
+## Practical rule
+
+A generator is most useful when it creates a starting point, not a finished system. You still need to check:
+
+- the Java version
+- the build environment
+- runtime startup
+- server authority
+- Bedrock compatibility constraints
+
+That validation step is where the real work starts, but the generator saves you from starting from a blank page every time.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Geyser 2.4.x.
