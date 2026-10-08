@@ -3,7 +3,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
-	site: 'https://fabricmodding.guide',
+	site: 'https://funisville-mf-minecraft.github.io',
+	base: '/fabric-mod-tutorial-web',
 	integrations: [
 		starlight({
 			title: 'Fabric Modding Guide',
