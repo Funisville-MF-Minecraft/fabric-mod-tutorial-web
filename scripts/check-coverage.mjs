@@ -1,8 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = path.resolve(process.cwd(), '..');
-const coveragePath = path.join(root, 'COVERAGE.md');
+const coveragePath = path.join(process.cwd(), 'COVERAGE.md');
 
 try {
   const text = fs.readFileSync(coveragePath, 'utf8');
