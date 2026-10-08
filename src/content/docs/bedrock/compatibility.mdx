@@ -1,0 +1,63 @@
+---
+title: Bedrock compatibility
+description: The practical differences between Java and Bedrock compatibility, and why bedrock support is a server design issue rather than a mod install issue.
+---
+
+# Bedrock compatibility
+
+Bedrock compatibility is one of the most misunderstood parts of the Minecraft ecosystem. It is not simply “install a client mod and join.” Bedrock and Java are different codebases, with different protocols and different expectations. A Java server must be treated as the real authority, and a Bedrock client has to connect through a bridge rather than by native Java mod support.
+
+## The real model
+
+The practical model is:
+
+- Java Edition server runs on Java and Fabric
+- Bedrock players connect through Geyser
+- Floodgate may be used for enhanced Bedrock login behavior
+- the Java server remains the authoritative gameplay environment
+
+This is a compatibility bridge, not a mirroring layer. It is not the same as allowing Java mod code to run on Bedrock clients.
+
+## What is usually compatible
+
+Some features work well across the bridge, especially when they are close to vanilla behavior or rely on server-side logic instead of Java-only client rendering. Commands, world rules, and basic gameplay loops tend to be more portable when they are designed with server authority in mind.
+
+This is why the site emphasizes server-first design. It is much easier to support Bedrock players when the server is designed around consistent world-state rules rather than client-specific UI or rendering logic.
+
+## What is usually not compatible
+
+The following are usually problematic:
+
+- client-side rendering changes
+- Java-only GUI or screen systems
+- features that rely on Java mod assets and client installation
+- mods whose behavior depends on Java-only assumptions that Bedrock cannot interpret
+
+In other words, Bedrock compatibility is not a blanket promise. It is a design constraint that you need to account for early.
+
+## Why this matters for content design
+
+If you are building gameplay content for a public server, the compatibility question should happen before release. Ask:
+
+- does this require a Java-only client feature?
+- will the Bedrock bridge translate this cleanly?
+- is the server still authoritative if the Bedrock client is participating?
+- what happens if the Bedrock player is not at the exact same version or protocol level?
+
+This makes Bedrock support a design decision instead of a final-stage problem.
+
+## Testing practices
+
+A Bedrock-compatible server needs real validation, not just theory. The testing plan should include:
+
+- Java client checks
+- Bedrock client checks
+- startup and crash recovery checks
+- permission and command validation
+- bridge and protocol sanity checks
+
+This matters because compatibility bugs tend to appear in a few predictable places: login, permissions, entity behavior, and world-state synchronization.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Geyser 2.4.x.

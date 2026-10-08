@@ -1,0 +1,89 @@
+---
+title: Java for modders
+description: The Java concepts that matter most when working in a Fabric project, even if you are learning as you go.
+---
+
+# Java for modders
+
+Fabric is still Java at its core. You do not need to become a Java expert before building a mod, but you do need to understand a small set of ideas well enough to read stack traces, follow generated project files, and reason about why a custom item or event breaks at runtime. This page is meant to be practical: it focuses on the Java concepts that come up again and again in Fabric work, not on treating Java as a large theoretical subject.
+
+## The mental model
+
+A Fabric mod is not just a giant script. It is a Java project that hooks into the Minecraft lifecycle, registers content, listens for events, and responds to server or client state changes. The key is to understand that Java code is not separate from the game. It is part of the game runtime.
+
+That means the build tool, the project structure, and the runtime environment all matter. If your Java environment is inconsistent, the generated project will fail before it even reaches the point where your code can run. Modding is therefore as much about environment correctness as it is about writing classes.
+
+## Language basics that matter most
+
+A few Java concepts show up in almost every Fabric project:
+
+- classes and packages
+- fields and methods
+- constructor patterns
+- enums and static members
+- interfaces and implementations
+- annotations
+- generics in common library code
+- exceptions and stack traces
+
+None of these are magic. They are just how the Fabric runtime and your mod code communicate with each other. A custom item or block often starts with a static registration call, then an entrypoint or event callback, then one or more registry calls that let Minecraft know about the new content.
+
+## Why stack traces matter
+
+When your project fails, the stack trace is usually the fastest way to get to the root cause. A stack trace is not just a list of scary Java text. It is the execution path that led to the error. In Fabric work, a stack trace often points to a missing dependency, a wrong version, a class not initialized correctly, or a runtime mismatch between the mod and the target Minecraft version.
+
+This is one of the reasons the project setup matters so much. A clean workspace and a stable Java toolchain make stack traces easier to interpret because the environment and the code are aligned.
+
+## Common beginner patterns
+
+When people first start modding, they often run into a handful of recurring patterns:
+
+- they import the wrong package or class
+- they forget that a server and client may behave differently
+- they register content too early or in the wrong lifecycle phase
+- they assume a custom class is live without confirming the mod loads
+- they ignore version mismatches between Fabric API, Loom, and Minecraft
+
+These are not “bad modder” problems. They are normal onboarding problems. The trick is to debug them in a structured way: confirm the Java version, confirm the project sync, confirm the mod loads, and then isolate the code path that is failing.
+
+## Package structure and organization
+
+A clean Fabric project usually leaves clear separation between:
+
+- mod bootstrap and metadata
+- data generation logic
+- item and block registrations
+- event listeners
+- world or gameplay logic
+- optional networking or command code
+
+This organization matters because a mod grows quickly. What starts as a single class can become a dozen classes with registries, configuration, and state. Clear package structure reduces the chance that your mod becomes difficult to debug later.
+
+## Java is not the only skill
+
+A lot of successful mod authors are not just Java developers. They are also comfortable with:
+
+- Gradle and dependency management
+- Git and version control
+- file layout and assets
+- Minecraft data formats and registries
+- server logic and world authority
+- debugging runtime behavior in a game environment
+
+That is one reason Fabric is such a good beginner target. It teaches both a language and a real software workflow. You are not only writing Java; you are learning how to build, run, and validate a game project in a repeatable way.
+
+## Minimal practical checklist
+
+Before you assume a Java problem is solved, confirm:
+
+- the Java version matches the target Minecraft version
+- the IDE is pointed at the same JDK you expect
+- Gradle has synced successfully
+- the mod manifest is valid
+- the project can launch in dev mode
+
+If all four are true, most of the harder Java debugging problems become much easier to isolate.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Loom 1.7.x–1.8.x.

@@ -1,0 +1,54 @@
+---
+title: Tools and APIs for server work
+description: The Fabric tools, APIs, and patterns that matter when building server-side gameplay and infrastructure.
+---
+
+# Tools and APIs for server work
+
+A Fabric server is not just a jar and a world folder. It is a project with runtime dependencies, data configuration, world logic, and sometimes access to helper libraries that make complex features easier to implement. This page looks at the tools and APIs that matter most when you are building a dedicated server or a public server environment.
+
+## Fabric API and the server model
+
+Fabric API is not a substitute for a gameplay design. It is a toolkit that gives your mod access to standard Fabric hooks, data patterns, and support for many common runtime tasks. For server work, the important thing is to understand what is server-authoritative and which behavior can be handled cleanly with standard APIs.
+
+If the feature is about commands, networking, world state, permissions, or server events, the server side is usually where you should start.
+
+## Gradle and project automation
+
+The build process matters even when you are not writing an enormous mod. Gradle is how the project resolves dependencies, manages mappings, and runs tasks such as `runClient`, `runServer`, and any custom tooling you add.
+
+For server work, a clean build process helps you do the boring but important things reliably: update dependencies, rebuild the jar, confirm the startup sequence, and produce a repeatable deployment artifact.
+
+## Command and permission patterns
+
+Commands are a major server-side concern. They can be used for admin tools, moderation features, debug output, or gameplay operations. A practical server architecture usually keeps commands, permission checks, and world rules separate from visual or client-facing code.
+
+This keeps the project understandable and reduces the chance that a command path accidentally becomes inconsistent with the server’s actual rules.
+
+## Networking and event flow
+
+If the server needs to talk to clients, mods, or other services, networking patterns matter. Even a seemingly simple feature can turn into an event and payload design problem if it is meant to move data between the server and client or between server modules.
+
+Server-side networking is often the place where a project becomes more than “a few registries.” The code starts to have explicit data contracts, message types, and validation rules. This is the point where carefully designed APIs become more important than ad-hoc logic.
+
+## Data and configuration
+
+Public servers often live or die by configuration and stability. A mod may ship with defaults, but real server environments need:
+
+- clear config files
+- backup-friendly world data
+- stable startup settings
+- a known-good dependency set
+- version-controlled configuration changes
+
+This is one reason tools and APIs matter: they support a more disciplined workflow, not just a more feature-rich one.
+
+## Why this matters for a public server
+
+A public server is usually a multi-layer system: the Minecraft world, the fabric server stack, any bridge tools such as Geyser, and the operational environment. If the server-side APIs are clean and the configuration is predictable, it becomes easier to support Java players and Bedrock players together.
+
+This also reduces the risk of “works on my machine” mistakes. A mod can be functionally correct but still fail under public conditions because the runtime assumptions were never documented or validated.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

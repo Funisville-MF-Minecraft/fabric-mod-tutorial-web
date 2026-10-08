@@ -1,0 +1,76 @@
+---
+title: Install and configure Geyser
+description: The practical Bedrock bridge setup for a Java Fabric server, with emphasis on correct installation and sane verification.
+---
+
+# Install and configure Geyser
+
+Geyser is the bridge that allows Bedrock players to join a Java server. If you want a Java Fabric server to accept Bedrock clients, this is the piece that makes the interoperability path real. It is not a Fabric mod in the Java client sense. It is a server-side compatibility layer that translates Bedrock protocol traffic into Java server traffic.
+
+This page is intentionally practical. It focuses on the way the bridge should be installed, configured, and checked before you open the server to players.
+
+## What Geyser does
+
+Geyser sits between the Bedrock client and the Java server. It accepts Bedrock connections, translates those packet flows into the Java server’s language, and allows Bedrock players to appear in the world as if they are using a compatible connection path.
+
+This is useful because Bedrock players cannot run Java mods directly. The actual Java server remains the source of truth, and the bridge is the compatibility layer that makes that server accessible to Bedrock clients.
+
+## The required pieces
+
+For a workable Bedrock path, the server usually needs:
+
+- a compatible Java server runtime
+- Fabric Loader and the expected mod set
+- a Geyser build matching the server version
+- Floodgate if you want Bedrock login or identity compatibility features
+- a clear understanding of permissions and config rules
+
+A bridge is not magic. It has to be matched to the active server version and supported by the configuration you run.
+
+## Recommended installation flow
+
+Before opening the server to real players:
+
+1. Confirm the Java server is already starting cleanly.
+2. Install the compatible Geyser build for your target version.
+3. Place the files in the expected server directory structure.
+4. Review the generated config and update any required values.
+5. Start the server and check the startup logs.
+6. Test player login and world access with a Bedrock client.
+7. Confirm permissions and world behavior before broad public access.
+
+The single most important habit is verification. A Bedrock bridge can be installed correctly on paper and still fail in practice because of config mismatches or world settings.
+
+## Common configuration considerations
+
+Several configuration elements are especially common in Geyser setups:
+
+- version compatibility between the server and the bridge
+- port and network setup
+- Bedrock login and identity handling
+- permissions and command behavior
+- world rules and player data expectations
+
+A Bedrock player joining a Java server is not the same as a Java client joining the same server. The Bedrock client has different protocols and expectations, so a server must be validated as a Bedrock-aware environment instead of assuming the Java-only path is sufficient.
+
+## Floodgate and login flow
+
+Floodgate is often used alongside Geyser to improve the Bedrock login path. It helps with Bedrock-specific identity flows and can make the Bedrock access story smoother, especially when a server is trying to support players who do not have a Java account path or want a more consistent login experience.
+
+This is a compatibility tool, not a replacement for the Java server. The server still lives on the Java side and remains the actual authority for the world state.
+
+## What to test before inviting players
+
+Before calling the setup “done,” test the following:
+
+- the server starts without Geyser-related startup failures
+- Bedrock players can connect and load into the world
+- commands and permissions still behave as expected
+- world state remains consistent after joins and disconnects
+- a crash recovery or restart path does not break the bridge configuration
+
+If you can do those checks, you have a much stronger basis for public Bedrock access.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Geyser 2.4.x.

@@ -1,0 +1,68 @@
+---
+title: Server-side-only mods
+description: Why some Fabric mods belong only on the server, and why that is important for public gameplay.
+---
+
+# Server-side-only mods
+
+Not every mod belongs on both the client and the server. In fact, a well-designed Fabric server often uses a mix of server-only, client-only, and shared content. The key difference is whether the game behavior needs to be enforced by the Java server as the source of truth.
+
+## Why server-only mods are common
+
+Server-only mods are often used for:
+
+- world rules and game balance
+- permissions and moderation
+- command systems
+- economy logic
+- custom progression or progression gates
+- world protection and security checks
+- data validation and multiplayer authority
+
+These features matter because players can manipulate the client and try to bypass rules locally. The server must enforce the actual behavior. If the logic lives only in a client mod, it is not a reliable multiplayer rule.
+
+## The authority rule
+
+A good server-side mod follows a simple rule: if the game state is important to the world, the Java server should validate it. This is how public multiplayer stays stable. A client can show a UI or help the player, but it cannot be the final authority on what is allowed.
+
+This is especially important for Bedrock-connected servers. A Bedrock client may be translated to the Java server through Geyser or Floodgate, but the Java server still decides whether the action is valid.
+
+## Good examples
+
+A server-only mod is a good fit when the change is about:
+
+- custom commands
+- custom world generation rules
+- inventory validation
+- progression restrictions
+- data syncing between server components
+- admin tools or moderation features
+
+This kind of mod is often easier to distribute because you do not need every client to install a matching mod. It also reduces the risk of visual mismatch, input issues, or client-only compatibility problems.
+
+## Bad examples
+
+A mod is not a good server-only candidate when it depends on:
+
+- custom client rendering
+- custom GUI overlays
+- local-only visual features
+- client-side-only controls or input handling
+- Java client-only data that Bedrock cannot interpret correctly
+
+If a feature cannot be understood without a matching client-side implementation, it is not a clean server-only design.
+
+## Operational benefits
+
+Server-only mods can improve a public multiplayer setup because:
+
+- they reduce client-side support burden
+- they make commands and rules easier to enforce
+- they keep the gameplay logic authoritative
+- they give the server a clearer design boundary
+
+This is one reason many public servers prefer a server-first philosophy: the world should be stable before the client experience is made more colorful or more custom.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

@@ -1,0 +1,76 @@
+---
+title: Running a public Fabric server
+description: The real operational plan for running a Fabric server that is stable, recoverable, and friendly for players.
+---
+
+# Running a public Fabric server
+
+Running a public Fabric server is not just “install Fabric, start the jar, and let players join.” It is an operations problem with a game layer on top. The server must be stable, the world must be recoverable, the mod set must be intentional, and the startup and restart processes must be predictable. That is where a lot of server projects fail: not in the code, but in the operational routine.
+
+## Start with a clean, private baseline
+
+Before a public launch, run the server in a private or testing environment. Use a backup-friendly world folder, a minimal mod set, and a clear idea of which features are required for your community. If the server is unstable in a small environment, it will be worse in a public one.
+
+This step matters because it gives you a known-good baseline. If something breaks later, you can compare changes against a stable state instead of guessing at the cause.
+
+## Keep your server intentionally small
+
+A public server usually does better when it is deliberately scoped. That means choosing the mod set carefully and avoiding “it seems fine” updates. A small, explicit modpack is easier to support than a large collection of mods that was assembled over time without a version review.
+
+When you are choosing mods, ask a few simple questions:
+
+- Does this mod require a specific Fabric API version?
+- Does it rely on server-side authority?
+- Does it work with the target version of Minecraft?
+- Does it change world rules or data in a way that would affect Bedrock compatibility?
+- Can I restore the world quickly if it fails?
+
+The right answer is not “it looks cool.” The right answer is “it is stable, understood, and recoverable.”
+
+## The rollout workflow
+
+A safe public rollout usually follows this flow:
+
+1. Test on a private save and confirm the server starts cleanly.
+2. Backup the world and configuration files.
+3. Update the server jar, mod list, or config changes.
+4. Start the server and confirm logs are clean.
+5. Verify the world loads and commands still work.
+6. Test with a few trusted players before opening fully.
+7. Keep a rollback plan ready.
+
+This is the same pattern used by many good game services: verify before public exposure, then monitor during the first hours of rollout.
+
+## Backup and restore are part of the server
+
+There are three things that matter most for a public server:
+
+- the world folder
+- the mod and config folder
+- the startup script and the JVM settings
+
+If any of those are not backed up or documented, the server is not ready for public use. A good backup routine should include the server directory, active config files, and any Bedrock bridge files if the server supports Bedrock players through Geyser or Floodgate.
+
+A rollback plan should be simple enough that someone else can follow it without panic. If a mod update breaks the start sequence, the process should be “restore previous world and jar, then re-test” rather than “figure out what happened live while players are waiting.”
+
+## Server administration and moderation
+
+Public servers also need rules and operations, not just the code. That means:
+
+- clear moderation practices
+- command-based permissions and admin roles
+- world protection or grief prevention if necessary
+- restart schedules and notices
+- a plan for patching or updating when errors appear
+
+The server becomes a service when it is shared. The difference between a private local server and a public server is not just the number of players. It is the fact that the service must be stable enough to support repeated use and recovery.
+
+## Bedrock-aware thinking
+
+If the server is meant to support Bedrock players, the server side still needs to remain authoritative. Bedrock players may join through Geyser or Floodgate, but the Java server still decides which actions are valid. That means the public server should be designed with a compatibility mindset from the beginning, not as a final step after the Java server is already running.
+
+This helps avoid weird issues where the server works for Java players but is inconsistent for Bedrock players. The path is not “make Java and Bedrock behave identically”; it is “make the Java server behave correctly, then translate the Bedrock client into that model with a compatible bridge.”
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x.

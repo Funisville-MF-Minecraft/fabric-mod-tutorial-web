@@ -1,0 +1,54 @@
+---
+title: Core modding concepts
+description: "The foundation concepts that make Fabric modding predictable: registries, lifecycle, events, and server authority."
+---
+
+# Core modding concepts
+
+Fabric modding is easier to reason about once you understand a few repeating concepts. These are the ideas that appear again and again in project setup, content registration, events, and server logic. If you learn them early, most modding work becomes much easier to debug.
+
+## Registries
+
+Minecraft is built around registries. Registries are the system that tells the game which blocks, items, entities, sounds, screens, and other objects exist and how they are identified. A mod often adds entries to one or more registries during initialization.
+
+This matters because the game does not “discover” content magically. It expects to be told what exists and how it is named. When a custom item or block is not registered correctly, the mod may compile but it will not appear in the game at runtime.
+
+## Entry points and lifecycle
+
+Fabric projects load through lifecycle hooks and entry points. These are the points where your code is told to initialize itself, register content, and respond to game events. A mod is not a loose collection of classes; it is a set of objects and callbacks that participate in the game lifecycle.
+
+That is why project structure matters. You often need a bootstrap class, a registry setup class, an event listener, and maybe a config class. The lifecycle is what connects those pieces together.
+
+## Events
+
+Minecraft uses events to tell your mod when something important happens: a player joins, a block is placed, a tick passes, a command is executed, data loads, or a world is initialized. Fabric exposes these hooks as event-based APIs. This is usually cleaner than rewriting the whole game loop yourself.
+
+The general idea is simple: listen for the event, decide whether it matters to your mod, and then act. Event-driven design is one reason Fabric projects stay maintainable even as they grow.
+
+## Server authority
+
+A key Fabric design principle is that the server is authoritative. In multiplayer, the Java server decides what is valid. A client can send input and display what it sees, but the server is the one that determines the final state of world rules, gameplay, commands, and permissions.
+
+This is especially important when you plan to support Bedrock players. Bedrock clients do not replace the Java server; they connect through a compatibility layer and are still governed by the Java server’s rules.
+
+## Rendering and logic split
+
+Client and server code are often split on purpose. Some things belong on the client only, such as rendering, HUD behavior, keybinds, or user interface tweaks. Some things belong on the server only, such as world rules, inventory validation, permissions, or custom logic that must remain authoritative. Shared logic can exist too, but it needs a clear model for where it is running.
+
+This split is one of the most important concepts in real mod development. Once you understand it, you stop thinking of a mod as “one program” and start thinking of it as a coordinated system with different runtime targets.
+
+## Data generation and content pipelines
+
+Modern mod projects often use generated data: language files, tags, recipes, loot tables, models, and block state definitions. This is not just a convenience. It makes content registration consistent and reduces manual mistakes.
+
+Generated data is a major part of large Fabric projects because it keeps content aligned with the exact project version, IDs, and item definitions. Once you learn to treat data generation as part of the build process, mod authoring becomes much more stable.
+
+## Debugging mindset
+
+The most useful habit in modding is to test at the smallest possible unit and then expand outward. If a custom item does not appear, check registration and mod manifest first. If a server command does not run, check the server lifecycle and permissions. If a Bedrock player struggles to connect, check the bridge and server compatibility path rather than assuming the Java-only setup is enough.
+
+The goal is not to be perfect on the first try. The goal is to make the failure obvious and fix it in the right layer.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Loom 1.7.x–1.8.x.

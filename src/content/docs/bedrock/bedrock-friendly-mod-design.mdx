@@ -1,0 +1,57 @@
+---
+title: Bedrock-friendly mod design
+description: How to design server features that stay stable and understandable when Bedrock clients join a Java server.
+---
+
+# Bedrock-friendly mod design
+
+Bedrock-friendly mod design is less about making Java mods look like Bedrock mods and more about designing around a server-authoritative model. If the server is the real source of truth, the mod architecture should respect that. The easier the server logic is to reason about, the easier it is to support Bedrock clients through the protocol bridge.
+
+## Design around server authority
+
+Good Bedrock-friendly mods usually rely on:
+
+- server-validated game rules
+- predictable permissions and commands
+- world logic that is stable across clients
+- data and configuration that is not client-dependent
+
+The reason is simple: the client is not the final authority. When a Bedrock player joins a Java server, the compatibility bridge has to translate their inputs and behavior into a server model that is already valid.
+
+## Favor simple, predictable features
+
+Features that are easiest to support across Bedrock and Java tend to be:
+
+- world-based rules
+- command-driven behavior
+- stable server logic with clear validation
+- gameplay loops that do not depend on a Java-only client state
+
+Features that are harder to support include custom client-only screens, Java-only UI flows, and direct client-side assumptions that the Bedrock client cannot emulate.
+
+## Keep the UI and gameplay separated
+
+A common mistake is to let a mod’s visual behavior and gameplay logic become tangled. This is dangerous in multiplayer and especially risky when Bedrock players are part of the target audience. Keep the business logic on the server and keep client rendering or UI tweaks as a separate concern.
+
+This separation helps with maintainability and reduces the risk that the Bedrock bridge is forced to translate a UI or rendering flow that it was never designed to support.
+
+## Respect version boundaries
+
+Bedrock compatibility is version-sensitive. Geyser, Floodgate, the Java server, and the target Minecraft version all matter. A feature that works with one version combination may fail in another. The practical lesson is to treat Bedrock support as a compatibility pathway that requires explicit validation rather than a generic promise.
+
+This is not a reason to avoid supporting Bedrock. It is a reason to design intentionally and test carefully.
+
+## Practical rules of thumb
+
+Before building or shipping a feature that should work with Bedrock, ask:
+
+- does this rely on a client-only Java feature?
+- does the Java server validate this data?
+- will Bedrock clients be able to use this without weird translation issues?
+- is the feature stable after a server restart and reconnect?
+
+If the answer is unclear, the feature likely needs more design work before it is ready for public use.
+
+## Tested on
+
+Minecraft 1.21.1, Fabric Loader 0.16.x, Fabric API 0.115.x, Geyser 2.4.x.
