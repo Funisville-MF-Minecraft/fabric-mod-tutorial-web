@@ -7,6 +7,19 @@ description: Honesty about what Bedrock players can and cannot do on a Java Fabr
 
 Fabric mods do not run on Bedrock clients. Minecraft: Bedrock Edition uses a different protocol, different networking stack, and a different codebase than Java Edition. That means a Bedrock player cannot simply install a Java Fabric mod and join a Java server in the same way a Java player does.
 
+## If you only own Bedrock
+
+You do not need to own Java Edition or ask a sibling to set up a Java modding environment just to understand the architecture. The important thing is to understand that Bedrock players join a Java server through a compatibility bridge, and the server must be configured to speak the Java protocol correctly.
+
+If you are Bedrock-only, your useful path is usually:
+
+- learn what a Java server is and why it matters
+- understand how Geyser and Floodgate sit in front of the Java server
+- check whether a public server supports Bedrock properly before joining
+- focus on server compatibility, permissions, and login rules instead of Java-side mod development
+
+This site is still relevant to you because the server-side rules and Bedrock translation layer are the parts that matter most for a real Bedrock-connected experience.
+
 ## The supported route
 
 The practical path is Geyser plus Floodgate. Geyser bridges the Bedrock protocol to the Java server, and Floodgate helps Bedrock users join without a Java account or with extra compatibility handling for login flows.
